@@ -22,53 +22,33 @@ public class WebAppInterface {
         createSnackBar(email);
     }
 
+    private void createSnackBar( String email) {
+
+        Snackbar.make(view,"email", Snackbar.LENGTH_INDEFINITE).setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE).setBackgroundTint(Color.parseColor("#dc3545")).setAction("Confirmar", new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                AlertDialog dialog;
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        webView.getSettings().setJavaScriptEnabled(true);
+                    }
+                });
+                dialog = builder.create();
+                dialog.show();
+            }
+                }).show();
+    }
     public WebAppInterface(Context context, View view, WebView webView){
         this.context=context;
         this.view=view;
         this.webView = webView;
     }
-
-    private void createSnackBar( String email) {
-
-        
-
-        Snackbar.make(view,"¿Está seguro de guardar el usuario \""+email+"\"?", Snackbar.LENGTH_INDEFINITE)
-                .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE)
-                .setBackgroundTint(Color.parseColor("#dc3545"))
-                .setAction("Confirmar", new View.OnClickListener(){
-                    @Override
-                    public void onClick(View v) {
-
-                        AlertDialog dialog;
-                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                        builder.setTitle("Felicitaciones");
-                        builder.setMessage("Su email es  \""+email);
-                        builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                webView.getSettings().setJavaScriptEnabled(true);
-
-                                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
-                                    webView.evaluateJavascript("limpiar();", null);
-                                } else {
-                                    webView.loadUrl("javascript:limpiar();");
-                                }
-
-                                run("limpiar()");
-                            }
-                        });
-                        dialog = builder.create();
-                        dialog.setCancelable(false);
-                        dialog.setCanceledOnTouchOutside(false);
-                        dialog.show();
-                    }
-                }).show();
-    }
-
-    public void run(final String scriptSrc) {
+    public void run(final String sc) {
         webView.post(new Runnable() {
             @Override public void run() {
-                webView.loadUrl("javascript:" + scriptSrc); }
+                webView.loadUrl("javascript:" + sc); }
         });
     }
 
